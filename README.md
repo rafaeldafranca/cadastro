@@ -14,7 +14,7 @@ No meu desafio é um cadastro de usuários via Api onde um usuário possa criar 
 1) Via Docker
  
 	- Verifique se o docker se encontra ativo.
-	- Entre no prompt de comando e crie uma imagem local do projeto.
+	- Entre no prompt de comando, acesse a **pasta raiz do projeto onde fica a solução** e crie uma imagem local do projeto.
 		> docker build -t cadastro-img -f Dockerfile .
 	- Inicie a imagem na porta 8080
 		> docker run -d -p 8080:80 --name cadastro cadastro-img
@@ -22,10 +22,42 @@ No meu desafio é um cadastro de usuários via Api onde um usuário possa criar 
 
 2) Via projeto pelo Visual Studio
 	
-	Abra o projeto no Visual Studio e aperte F5.
+	Abra o projeto no Visual Studio e rode a api apertando F5.
 	Aguarde a compilação e o download de pacotes Nuget.
 	Ele entrará automaticamente na página do Swagger podendo utilizar normalmente em programas de terceiros.
+
+**Endpoints** ( *Utilizando a porta 8080 como exemplo.* )
 	
+	- Gerar token de acesso
+		POST http://localhost:8080/token  
+		{
+		  "email": "string",
+		  "password": "string"
+		}
+		
+	- Criar um usuário novo
+	POST http://localhost:8080/NewUser  
+		{
+		  "name": "string",
+		  "email": "string",
+		  "password": "string",
+		  "phones": [
+		    {
+		      "ddd": "string",
+		      "number": "string"
+		    }
+		  ]
+		}
+		
+	- Buscar todos os usuários cadastrados ( Bearer authentication )
+	GET http://localhost:8080/GetAll 
+	
+	- Retornar os dados do usuário logado ( Bearer authentication )
+	GET http://localhost:8080/Profile
+	
+	- Retornar os dados do usuário logado passando a sua ID ( Bearer authentication )
+	GET http://localhost:8080/Profile/{id}
+
 **Considerações**
 
 No desafio, o banco de dados seria um banco de memória (InMemory) criado pelo próprio EntityFramework e as Queries feitas em Dapper.
