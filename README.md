@@ -1,6 +1,6 @@
 # Desafio Cadastro de Usuários
 
-No meu desafio é um cadastro de usuários via Api onde um usuário possa criar uma conta e gerar um token de autenticação para utilizar o serviço de perfil.
+No meu desafio, eu devo criar um cadastro de usuários via Api onde um usuário possa criar uma conta e gerar um token de autenticação para utilizar o serviço de perfil.
 	
 *O que é preciso para rodar o projeto ?*
 
