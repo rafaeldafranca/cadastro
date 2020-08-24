@@ -1,7 +1,6 @@
 ﻿using Cadastro.Core.Contexts;
 using Cadastro.Domain.Entities;
 using Cadastro.Domain.Interfaces.Repos;
-using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,40 +18,7 @@ namespace Cadastro.Core.Repo
         }
         public IEnumerable<User> GetAll()
         {
-            //dapper comentado devido ao banco de memória.
-            //var cn = _context.Database.GetDbConnection();
-
-            //string sql = @"
-            //    SELECT u.Id, u.Name, u.Email, u.Password, u.Created, u.Modified, u.Last_login,
-            //    p.Id, p.UserId, p.Ddd, p.Number 
-            //    FROM Users u
-            //    INNER JOIN Phones p
-            //    on u.Id = p.UserId
-            //    order by u.Id";
-
-            //var dapperDictionary = new Dictionary<Guid, User>();
-
-            //var resultDapper = cn.Query<User, Phone, User>(sql,
-            //     (user, phone) =>
-            //     {
-            //         if (!dapperDictionary.TryGetValue(user.Id, out User userResult))
-            //         {
-            //             userResult = user;
-            //             if (userResult.Phones == null && phone != null)
-            //                 userResult.Phones = new List<Phone>();
-            //             dapperDictionary.Add(user.Id, userResult);
-            //         }
-            //         if (phone != null)
-            //             userResult.Phones.Add(phone);
-
-            //         return userResult;
-            //     },
-            //     splitOn: "Id")
-            //    .Distinct()
-            //    .ToList();
-
-            //return resultDapper;
-
+           
             var result = _context.User
                     .Include(x => x.Phones)
                     .ToList();
@@ -73,46 +39,6 @@ namespace Cadastro.Core.Repo
 
         public User Get(Guid id)
         {
-            /*---------------------------------------------------------
-             * dapper comentado devido ao banco de memória.
-             *---------------------------------------------------------*/
-             
-            //var cn = _context.Database.GetDbConnection();
-
-            //string sql = @"
-            //    SELECT u.Id, u.Name, u.Email, u.Password, u.Created, u.Modified, u.Last_login,
-            //    p.Id, p.UserId, p.Ddd, p.Number 
-            //    FROM Users u
-            //    INNER JOIN Phones p
-            //    on u.Id = p.UserId
-            //    WHERE u.Id = @id
-            //    order by u.Id";
-
-            //var dapperDictionary = new Dictionary<Guid, User>();
-
-            //var resultDapper = cn.Query<User, Phone, User>(sql,
-            //     (user, phone) =>
-            //     {
-            //         if (!dapperDictionary.TryGetValue(user.Id, out User userResult))
-            //         {
-            //             userResult = user;
-            //             if (userResult.Phones == null && phone != null)
-            //                 userResult.Phones = new List<Phone>();
-            //             dapperDictionary.Add(user.Id, userResult);
-            //         }
-            //         if (phone != null)
-            //             userResult.Phones.Add(phone);
-
-            //         return userResult;
-            //     },
-            //      param: new { id },
-            //     splitOn: "Id")
-            //    .Distinct()
-            //    .SingleOrDefault();
-
-            //return resultDapper;
-
-            //usando o EF no inmemory
             var result = _context.User.AsQueryable()
                .Include(x => x.Phones)
                .Where(x => x.Id == id)
@@ -131,45 +57,7 @@ namespace Cadastro.Core.Repo
 
         public User Validate(string email, string password)
         {
-            /*---------------------------------------------------------
-             * dapper comentado devido ao banco de memória.
-             *---------------------------------------------------------*/
-            //var cn = _context.Database.GetDbConnection();
-
-            //string sql = @"
-            //    SELECT u.Id, u.Name, u.Email, u.Password, u.Created, u.Modified, u.Last_login,
-            //    p.Id, p.UserId, p.Ddd, p.Number 
-            //    FROM Users u
-            //    INNER JOIN Phones p
-            //    on u.Id = p.UserId
-            //    WHERE u.Email = @email and u.Password = @password
-            //    order by u.Id";
-
-            //var dapperDictionary = new Dictionary<Guid, User>();
-
-            //var resultDapper = cn.Query<User, Phone, User>(sql,
-            //     (user, phone) =>
-            //     {
-            //         if (!dapperDictionary.TryGetValue(user.Id, out User userResult))
-            //         {
-            //             userResult = user;
-            //             if (userResult.Phones == null && phone != null)
-            //                 userResult.Phones = new List<Phone>();
-            //             dapperDictionary.Add(user.Id, userResult);
-            //         }
-            //         if (phone != null)
-            //             userResult.Phones.Add(phone);
-
-            //         return userResult;
-            //     },
-            //      param: new { email, password },
-            //     splitOn: "Id")
-            //    .Distinct()
-            //    .SingleOrDefault();
-
-            //return resultDapper;
-
-            //usando o EF no inmemory
+           
             var result = _context.User.AsQueryable()
               .Include(x => x.Phones)
               .Where(q => q.Email == email && q.Password == password)
@@ -187,16 +75,6 @@ namespace Cadastro.Core.Repo
 
         public bool CheckUser(string email)
         {
-            /*---------------------------------------------------------
-             * dapper comentado devido ao banco de memória.
-             *---------------------------------------------------------*/
-            //var cn = _context.Database.GetDbConnection();
-
-            //string sql = "SELECT * FROM Users u WHERE u.Email = @email";
-            //var resultDapper = cn.QueryFirstOrDefault<User>(sql, new { Email = email });
-            //return (resultDapper != null);
-
-            //usando o EF no inmemory
             var query = from q in _context.User.AsQueryable()
                         where q.Email == email
                         select q;

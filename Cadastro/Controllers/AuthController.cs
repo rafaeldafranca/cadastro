@@ -51,12 +51,6 @@ namespace Cadastro.Controllers
                     }
                     else
                     {
-                        //retorna na estrutura do token.
-                        //return ReturnPackage(() =>
-                        //    new TokenService().Token(currentUser, signingConfigurations, tokenConfig)
-                        //);
-
-                        //retorna na estrutura do desafio.
                         return ReturnPackage(() =>
                         {
                             var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
