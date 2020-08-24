@@ -39,7 +39,7 @@ namespace Cadastro.Domain.Adapters
                 Name = data.Name,
                 Created = data.Created,
                 Last_login = data.Last_login,
-                Password = data.Password,
+               // Password = data.Password,
                 Modified = data.Modified
             };
 
