@@ -11,6 +11,8 @@ using System;
 
 namespace Cadastro.Controllers
 {
+    [Produces("application/json")]
+    [Route("api/v1/[controller]")]
     public class AuthController : BaseController
     {
         private readonly IUserService _userSrv;

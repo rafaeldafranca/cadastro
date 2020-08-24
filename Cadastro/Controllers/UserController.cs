@@ -11,6 +11,8 @@ using System;
 
 namespace Cadastro.Controllers
 {
+    [Produces("application/json")]
+    [Route("api/v1/[controller]")]
     public class UserController : BaseController
     {
         private readonly IUserService _userSrv;
@@ -26,7 +28,7 @@ namespace Cadastro.Controllers
         /// <param name="tokenConfig"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("NewUser")]
+        [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult NewUser([FromBody] UserModel data
@@ -66,14 +68,8 @@ namespace Cadastro.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            try
-            {
-                return ReturnPackage(() => _userSrv.GetAll());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { mensagem = ex.Message });
-            }
+            return ReturnPackage(() => _userSrv.GetAll());
+
         }
 
         /// <summary>
