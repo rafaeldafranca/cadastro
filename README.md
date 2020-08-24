@@ -29,14 +29,14 @@ No meu desafio, eu devo criar um cadastro de usuários via Api onde um usuário 
 **Endpoints** ( *Utilizando a porta 8080 como exemplo.* )
 	
 	- Gerar token de acesso
-		POST http://localhost:8080/token  
+		POST http://localhost:8080/api/v1/auth/token  
 		{
 		  "email": "string",
 		  "password": "string"
 		}
 		
 	- Criar um usuário novo
-	POST http://localhost:8080/NewUser  
+	POST http://localhost:8080/api/v1/User
 		{
 		  "name": "string",
 		  "email": "string",
@@ -50,13 +50,13 @@ No meu desafio, eu devo criar um cadastro de usuários via Api onde um usuário 
 		}
 		
 	- Buscar todos os usuários cadastrados ( Bearer authentication )
-	GET http://localhost:8080/GetAll 
+	GET http://localhost:8080/api/v1/User/GetAll 
 	
 	- Retornar os dados do usuário logado ( Bearer authentication )
-	GET http://localhost:8080/Profile
+	GET http://localhost:8080/api/v1/User/Profile
 	
 	- Retornar os dados do usuário logado passando a sua ID ( Bearer authentication )
-	GET http://localhost:8080/Profile/{id}
+	GET http://localhost:8080/api/v1/User/Profile/{id}
 
 **Considerações**
 
