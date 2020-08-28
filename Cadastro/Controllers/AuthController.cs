@@ -1,8 +1,6 @@
 ﻿using Cadastro.Controllers.Base;
-using Cadastro.Domain.Entities;
 using Cadastro.Domain.Interfaces.Services;
 using Cadastro.Services;
-using Cadastro.Services.Adapters;
 using Cadastro.Services.Configs;
 using Cadastro.Services.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -50,12 +48,9 @@ namespace Cadastro.Controllers
                             return StatusCode(401, "Usuario Inválido");
                         else
                         {
-                            return ReturnPackage(() =>
-                            {
-                                var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
-                                currentUser.Token = token.AccessToken;
-                                return currentUser;
-                            });
+                            var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
+                            currentUser.Token = token.AccessToken;
+                            return currentUser;
                         }
                     }
                 });

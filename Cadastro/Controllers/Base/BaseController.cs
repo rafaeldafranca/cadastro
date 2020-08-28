@@ -8,8 +8,12 @@ namespace Cadastro.Controllers.Base
     {
         protected IActionResult ReturnPackage(Func<dynamic> procedure, HttpStatusCode status = HttpStatusCode.OK, string message = null)
         {
+            string chamada = $"{HttpContext.Request.Method} -  {HttpContext.Request.Path.Value} ";
+            string RemoteConnection = HttpContext.Connection.RemoteIpAddress.ToString();
+
             try
             {
+                Serilog.Log.Information($"*** Iniciando {chamada} para {RemoteConnection} ***");
                 var result = procedure();
 
                 if (result is ObjectResult)
@@ -23,8 +27,10 @@ namespace Cadastro.Controllers.Base
             }
             catch (Exception ex)
             {
+                Serilog.Log.Fatal(ex, $"Server error {chamada} para {RemoteConnection}");
                 return StatusCode(500, new { mensagem = ex.Message });
             }
+           
         }
     }
 }
