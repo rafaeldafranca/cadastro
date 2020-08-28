@@ -1,4 +1,3 @@
-using Cadastro.Filters;
 using Cadastro.IoC;
 using Cadastro.Services.Configs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,10 +24,6 @@ namespace Cadastro
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvc(config =>
-            {
-                config.Filters.Add(typeof(CustomExceptionFilter));
-            });
             ConfigureSwagger(services);
             ConfigureAuthentication(services);
             services.Configure(Configuration);

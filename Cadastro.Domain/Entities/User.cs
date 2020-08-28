@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cadastro.Domain.Base;
+using System;
 using System.Collections.Generic;
 
 namespace Cadastro.Domain.Entities
@@ -24,15 +25,12 @@ namespace Cadastro.Domain.Entities
             if (id == Guid.Empty)
                 Id = Guid.NewGuid();
 
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("O nome não pode ser em branco");
-
-            if (string.IsNullOrEmpty(email))
-                throw new ArgumentException("O email não pode ser em branco");
-
-            if (string.IsNullOrEmpty(password))
-                throw new ArgumentException("O senha não pode ser em branco");
-
+            ValidateException.New()
+                .When(string.IsNullOrEmpty(name), "O nome não pode ser em branco")
+                .When(string.IsNullOrEmpty(email), "O email não pode ser em branco")
+                .When(string.IsNullOrEmpty(password), "A senha não pode ser em branco")
+                .ThrowExceptionIfExist();
+     
             Name = name;
             Email = email;
             Password = password;
