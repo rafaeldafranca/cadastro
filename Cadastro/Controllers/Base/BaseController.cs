@@ -12,6 +12,9 @@ namespace Cadastro.Controllers.Base
             {
                 var result = procedure();
 
+                if (result is ObjectResult)
+                    return result;
+
                 if (message == null)
                     return StatusCode((int)status, result);
 

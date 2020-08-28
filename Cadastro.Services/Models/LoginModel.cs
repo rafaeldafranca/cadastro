@@ -1,4 +1,5 @@
-﻿using Cadastro.Domain.VO;
+﻿
+using Cadastro.Services.Models;
 using System;
 using System.Collections.Generic;
 

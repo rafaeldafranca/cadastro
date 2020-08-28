@@ -1,9 +1,9 @@
 ﻿using Cadastro.Controllers.Base;
-using Cadastro.Domain.Adapters;
 using Cadastro.Domain.Interfaces.Services;
-using Cadastro.Domain.VO;
 using Cadastro.Services;
+using Cadastro.Services.Adapters;
 using Cadastro.Services.Configs;
+using Cadastro.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +20,7 @@ namespace Cadastro.Controllers
         {
             _userSrv = userService;
         }
+
         /// <summary>
         /// Cria um usuário novo
         /// </summary>
@@ -35,31 +36,28 @@ namespace Cadastro.Controllers
                                   , [FromServices] SigningConfig signingConfigurations
                                   , [FromServices] TokenConfig tokenConfig)
         {
-            try
+            return ReturnPackage(() =>
             {
                 if (_userSrv.CheckUser(data.Email))
                     return StatusCode(400, "E-mail já existente");
-                else
-                {
-                    var _newUser = data.Adapter();
-                    return ReturnPackage(() =>
-                    {
-                        var userDB = _userSrv.Add(_newUser);
-                        var user = userDB.Adapter();
-                        var token = new TokenService().Token(userDB, signingConfigurations, tokenConfig);
-                        user.Token = token.AccessToken;
 
-                        return user;
-                    }
-                    , System.Net.HttpStatusCode.Created);
-                }
+                var _newUser = data.Adapter();
+                var userDB = _userSrv.Add(_newUser);
+                var user = userDB.Adapter();
+
+                TokenModel token = new TokenService().Token(
+                                                userDB,
+                                                signingConfigurations,
+                                                tokenConfig);
+
+                user.Token = token.AccessToken;
+
+                return user;
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { mensagem = ex.Message });
-            }
+            , System.Net.HttpStatusCode.Created);
 
         }
+
         /// <summary>
         /// Buscar todos os dados do banco.
         /// </summary>
@@ -69,7 +67,6 @@ namespace Cadastro.Controllers
         public IActionResult GetAll()
         {
             return ReturnPackage(() => _userSrv.GetAll());
-
         }
 
         /// <summary>
@@ -81,18 +78,14 @@ namespace Cadastro.Controllers
         [HttpGet("Profile/{id}")]
         public IActionResult GetById(Guid id)
         {
-            try
+            return ReturnPackage(() =>
             {
                 var TokenUserId = Guid.Parse(User.Identity.Name);
                 if (id != TokenUserId)
                     return StatusCode(401, new { mensagem = "Não autorizado" });
 
                 return Get();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { mensagem = ex.Message });
-            }
+            });
         }
 
         /// <summary>
@@ -103,15 +96,11 @@ namespace Cadastro.Controllers
         [HttpGet("Profile")]
         public IActionResult Get()
         {
-            try
+            return ReturnPackage(() =>
             {
-                var TokenUserId = Guid.Parse(User.Identity.Name);
-                return ReturnPackage(() => _userSrv.GetbyId(TokenUserId)?.Adapter());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { mensagem = ex.Message });
-            }
+                Guid TokenUserId = Guid.Parse(User.Identity.Name);
+                return _userSrv.GetbyId(TokenUserId)?.Adapter();
+            });
         }
     }
 }

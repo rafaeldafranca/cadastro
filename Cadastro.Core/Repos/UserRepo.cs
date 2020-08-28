@@ -28,9 +28,6 @@ namespace Cadastro.Core.Repo
 
         public User Add(User entity)
         {
-            entity.Created = DateTime.Now;
-            entity.Last_login = entity.Created;
-
             _context.Add(entity);
             _context.SaveChanges();
 
@@ -50,7 +47,7 @@ namespace Cadastro.Core.Repo
         public void LastLogin(Guid UserId)
         {
             var user = Get(UserId);
-            user.Last_login = DateTime.Now;
+            user.RegistrarAcesso();
             _context.User.Update(user);
             _context.SaveChanges();
         }
@@ -65,7 +62,7 @@ namespace Cadastro.Core.Repo
 
             if (result != null) //usuario logado !
             {
-                result.Last_login = DateTime.Now;
+                result.RegistrarAcesso();
                 _context.User.Update(result);
                 _context.SaveChanges();
             }

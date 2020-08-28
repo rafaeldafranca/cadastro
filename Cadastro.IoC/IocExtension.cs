@@ -30,11 +30,11 @@ namespace Cadastro.IoC
             services.AddDbContext<PrincipalContext>(opt =>
             opt.UseInMemoryDatabase("Cadastro"));
             //opt.UseSqlServer(Configuration.GetConnectionString("CnSqlServer")));
-         
-            //services.AddTransient<IUserRepo, UserDapperRepo>();
-            services.AddTransient<IUserRepo, UserRepo>();
-            services.AddTransient<ITokenService, TokenService>();
-            services.AddTransient<IUserService, UserService>();
+
+            //services.AddScoped<IUserRepo, UserDapperRepo>();
+            services.AddScoped<IUserRepo, UserRepo>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
 
         }
 

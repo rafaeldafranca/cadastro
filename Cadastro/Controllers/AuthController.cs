@@ -1,10 +1,10 @@
 ﻿using Cadastro.Controllers.Base;
-using Cadastro.Domain.Adapters;
 using Cadastro.Domain.Entities;
 using Cadastro.Domain.Interfaces.Services;
-using Cadastro.Domain.VO;
 using Cadastro.Services;
+using Cadastro.Services.Adapters;
 using Cadastro.Services.Configs;
+using Cadastro.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

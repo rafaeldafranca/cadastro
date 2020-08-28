@@ -1,4 +1,4 @@
-﻿namespace Cadastro.Services.Util
+﻿namespace Cadastro.Services.Models
 {
     public class TokenModel
     {
