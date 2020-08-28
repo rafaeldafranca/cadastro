@@ -1,5 +1,6 @@
 ﻿using Cadastro.Controllers.Base;
 using Cadastro.Domain.Interfaces.Services;
+using Cadastro.Domain.Models;
 using Cadastro.Services;
 using Cadastro.Services.Adapters;
 using Cadastro.Services.Configs;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace Cadastro.Controllers
 {
@@ -41,18 +43,23 @@ namespace Cadastro.Controllers
                 if (_userSrv.CheckUser(data.Email))
                     return StatusCode(400, "E-mail já existente");
 
-                var _newUser = data.Adapter();
-                var userDB = _userSrv.Add(_newUser);
-                var user = userDB.Adapter();
+                var currentUser = _userSrv.Add(data.Adapter());
+                var currentLogin = new LoginModel(currentUser.Id, currentUser.Name, currentUser.Email
+                    , currentUser.Created, currentUser.Modified, currentUser.Last_login,
+                    currentUser.Phones.Select(q => new PhoneUserModel()
+                    {
+                        Ddd = q.Ddd,
+                        Number = q.Number
+                    }).ToList());
 
                 TokenModel token = new TokenService().Token(
-                                                userDB,
+                                                currentLogin,
                                                 signingConfigurations,
                                                 tokenConfig);
 
-                user.Token = token.AccessToken;
+                currentLogin.Token = token.AccessToken;
 
-                return user;
+                return currentLogin;
             }
             , System.Net.HttpStatusCode.Created);
 

@@ -37,29 +37,28 @@ namespace Cadastro.Controllers
         {
             try
             {
-                bool UserExist = _userSrv.CheckUser(data.Email);
-                if (!UserExist)
-                    return ReturnPackage(() => null,
-                           System.Net.HttpStatusCode.BadRequest, "Usuario Inválido");
-                else
+                return ReturnPackage(() =>
                 {
-                    User currentUser = _userSrv.Validate(data.Email, data.Password);
-                    if (currentUser == null)
-                    {
-                        return ReturnPackage(() => null,
-                               System.Net.HttpStatusCode.Unauthorized, "Usuario Inválido");
-                    }
+                    bool UserExist = _userSrv.CheckUser(data.Email);
+                    if (!UserExist)
+                        return StatusCode(400, "Usuario Inválido");
+
                     else
                     {
-                        return ReturnPackage(() =>
+                        var currentUser = _userSrv.Validate(data.Email, data.Password);
+                        if (currentUser == null)
+                            return StatusCode(401, "Usuario Inválido");
+                        else
                         {
-                            var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
-                            var user = currentUser.Adapter();
-                            user.Token = token.AccessToken;
-                            return user;
-                        });
+                            return ReturnPackage(() =>
+                            {
+                                var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
+                                currentUser.Token = token.AccessToken;
+                                return currentUser;
+                            });
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

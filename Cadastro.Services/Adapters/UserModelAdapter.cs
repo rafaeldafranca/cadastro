@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Cadastro.Services.Adapters
 {
-    public static class UserAdapter
+    public static class UserModelAdapter
     {
         public static User Adapter(this UserModel data)
         {
@@ -29,7 +29,7 @@ namespace Cadastro.Services.Adapters
                 );
         }
 
-        public static LoginModel Adapter(this User data)
+        public static UserModel Adapter(this User data)
         {
             if (data == null) return null;
             List<PhoneUserModel> phones = null;
@@ -46,19 +46,14 @@ namespace Cadastro.Services.Adapters
                );
             }
 
-            LoginModel user = new LoginModel()
+            UserModel user = new UserModel()
             {
-                Id = data.Id,
                 Email = data.Email,
                 Name = data.Name,
-                Created = data.Created,
-                Last_login = data.Last_login,
-                Modified = data.Modified,
                 Phones = phones
             };
 
             return user;
-
         }
     }
 }

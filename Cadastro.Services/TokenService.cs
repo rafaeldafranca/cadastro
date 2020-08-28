@@ -1,4 +1,4 @@
-﻿using Cadastro.Domain.Entities;
+﻿using Cadastro.Domain.Models;
 using Cadastro.Services.Configs;
 using Cadastro.Services.Interfaces;
 using Cadastro.Services.Models;
@@ -14,7 +14,7 @@ namespace Cadastro.Services
     public class TokenService: ITokenService
     {
 
-        public TokenModel Token(User user, SigningConfig signingConfigurations
+        public TokenModel Token(LoginModel user, SigningConfig signingConfigurations
                                  , TokenConfig tokenConfigurations)
         {
             try
