@@ -25,12 +25,12 @@ namespace Cadastro.Domain.Entities
             if (id == Guid.Empty)
                 Id = Guid.NewGuid();
 
-            ValidateException.New()
+            DomainValidate.Init()
                 .When(string.IsNullOrEmpty(name), "O nome não pode ser em branco")
                 .When(string.IsNullOrEmpty(email), "O email não pode ser em branco")
                 .When(string.IsNullOrEmpty(password), "A senha não pode ser em branco")
                 .ThrowExceptionIfExist();
-     
+
             Name = name;
             Email = email;
             Password = password;

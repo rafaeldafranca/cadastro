@@ -1,4 +1,4 @@
-﻿using Cadastro.Domain;
+﻿using Cadastro.Domain.Base;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;

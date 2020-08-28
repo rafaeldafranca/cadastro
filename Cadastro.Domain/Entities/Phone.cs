@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cadastro.Domain.Base;
+using System;
 
 namespace Cadastro.Domain.Entities
 {
@@ -16,6 +17,11 @@ namespace Cadastro.Domain.Entities
 
         public Phone(string ddd, string number)
         {
+            DomainValidate.Init()
+                .When(string.IsNullOrEmpty(number), "O numero do telefone não pode ser em branco")
+                .When(!string.IsNullOrEmpty(number) && string.IsNullOrEmpty(ddd), "O ddd não pode ser em branco")
+                .ThrowExceptionIfExist();
+
             Ddd = ddd;
             Number = number;
         }
