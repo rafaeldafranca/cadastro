@@ -2,6 +2,7 @@ using Cadastro.Core.Contexts;
 using Cadastro.Core.Repo;
 using Cadastro.Domain.Interfaces.Repos;
 using Cadastro.Domain.Interfaces.Services;
+using Cadastro.IoC;
 using Cadastro.Services;
 using Cadastro.Services.Configs;
 using Cadastro.Services.Interfaces;
@@ -32,7 +33,8 @@ namespace Cadastro
             services.AddControllers();
             ConfigureSwagger(services);
             ConfigureAuthentication(services);
-            ConfigureID(services);
+            services.Configure(Configuration);
+
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -143,29 +145,5 @@ namespace Cadastro
                     .RequireAuthenticatedUser().Build());
             });
         }
-        private void ConfigureID(IServiceCollection services)
-        {
-            /*------------------------------------------------------------------------------------------------
-             
-            APENAS PARA TESTAR AS CONSULTAS DO DAPPER. DAPPER NÃO UTILIZA BANCOS EM MEMORIA.
-            NECESSARIO SERVIDOR, CRIAR O BANCO E APLICAR MIGRATIONS. Configs no appSettings.Json
-              
-            Rodar comandos no Console do package manager e usar o options do contexto "UseSqlServer" comentado 
-            no lugar do UseInMemory e trocar a injeção para UserDapperRepo:
-
-                GERAR SCRIPT    : add-migration script -Project Cadastro.Core -Context PrincipalContext
-                GERAR BANCO     : update-database -Project Cadastro.Core -Context PrincipalContext 
-            
-            ------------------------------------------------------------------------------------------------*/
-
-            services.AddDbContext<PrincipalContext>(opt =>
-            opt.UseInMemoryDatabase("Cadastro"));
-            //opt.UseSqlServer(Configuration.GetConnectionString("CnSqlServer")));
-            //services.AddTransient<IUserRepo, UserDapperRepo>();
-            services.AddTransient<IUserRepo, UserRepo>();
-            services.AddTransient<ITokenService, TokenService>();
-            services.AddTransient<IUserService, UserService>();
-        }
-
     }
 }

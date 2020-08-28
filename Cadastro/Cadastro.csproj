@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cadastro.Core\Cadastro.Core.csproj" />
-    <ProjectReference Include="..\Cadastro.Services\Cadastro.Services.csproj" />
+    <ProjectReference Include="..\Cadastro.IoC\Cadastro.IoC.csproj" />
   </ItemGroup>
 
 

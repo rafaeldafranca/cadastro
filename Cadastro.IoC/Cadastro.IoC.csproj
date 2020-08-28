@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cadastro.Core\Cadastro.Core.csproj" />
+    <ProjectReference Include="..\Cadastro.Domain\Cadastro.Domain.csproj" />
+    <ProjectReference Include="..\Cadastro.Services\Cadastro.Services.csproj" />
+  </ItemGroup>
+
+</Project>
