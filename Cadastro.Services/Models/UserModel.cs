@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Cadastro.Domain.VO
+namespace Cadastro.Services.Models
 {
     public class UserModel
     {

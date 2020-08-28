@@ -18,7 +18,7 @@ namespace Cadastro.Services
 
         public User Add(User user)
         {
-            user.Password = user.Password.GetCadastroHashCode();
+            //user.Password = user.Password.GetCadastroHashCode();
             return _userRepo.Add(user);
         }
         

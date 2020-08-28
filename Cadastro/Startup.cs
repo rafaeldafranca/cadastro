@@ -1,16 +1,10 @@
-using Cadastro.Core.Contexts;
-using Cadastro.Core.Repo;
-using Cadastro.Domain.Interfaces.Repos;
-using Cadastro.Domain.Interfaces.Services;
+using Cadastro.Filters;
 using Cadastro.IoC;
-using Cadastro.Services;
 using Cadastro.Services.Configs;
-using Cadastro.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,15 +16,19 @@ namespace Cadastro
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc(config =>
+            {
+                config.Filters.Add(typeof(CustomExceptionFilter));
+            });
             ConfigureSwagger(services);
             ConfigureAuthentication(services);
             services.Configure(Configuration);
@@ -57,7 +55,6 @@ namespace Cadastro
                 endpoints.MapControllers();
             });
         }
-
         private void ConfigureSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(c =>

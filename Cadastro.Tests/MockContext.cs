@@ -1,4 +1,5 @@
-﻿using Cadastro.Core.Contexts;
+﻿using Bogus;
+using Cadastro.Core.Contexts;
 using Cadastro.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,22 +31,20 @@ namespace Cadastro.Tests
 
             };
 
+            var fake = new Faker();
+
             var Users = Enumerable.Range(1, 10)
-                .Select(i => new User
-                {
-                    Id = Guid.NewGuid(),
-                    Created = dtCadastro,
-                    Email = $"email{i}.teste.com",
-                    Last_login = dtCadastro,
-                    Modified = null,
-                    Name = $"Name{1} Test",
-                    Password = "123456",
-                    Phones = new List<Phone>()
-                    {
-                        new  Phone { Ddd = "21", Number = new Random().Next().ToString() },
-                        new  Phone { Ddd = "21", Number = new Random().Next().ToString() }
+                .Select(i => new User(
+                    Guid.NewGuid(),
+                     fake.Person.Email,
+                     fake.Person.FullName,
+                    "123456",
+                     new List<Phone>()                    
+                     {
+                        new  Phone ("21", fake.Person.Phone ),
+                        new  Phone ("21", fake.Person.Phone )
                     }
-                });
+                ));
 
             context.AddRange(Users);
             context.SaveChanges();

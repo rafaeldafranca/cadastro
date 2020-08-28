@@ -20,25 +20,16 @@ namespace Cadastro.Tests
         [TestMethod]
         public void TesteAdicionarUsuario()
         {
-            var UserMock = new User()
-            {
-                Email = "temp@test.com",
-                Name = "Ciclano da Silva",
-                Password = "123456",
-                Phones = new List<Phone>()
+            var UserMock = new User(
+                Guid.Empty,
+                "temp@test.com",
+                "Ciclano da Silva",
+                "123456",
+                new List<Phone>()
                 {
-                    new Phone()
-                    {
-                        Ddd = "21",
-                        Number = "333333"
-                    },
-                     new Phone()
-                    {
-                        Ddd = "21",
-                        Number = "999999999"
-                    }
-                }
-            };
+                    new Phone("21","333333"),
+                    new Phone( "21","999999999")
+                });
 
             var repo = new UserRepo(_context);
             var result = repo.Add(UserMock);
@@ -88,34 +79,5 @@ namespace Cadastro.Tests
             Assert.AreNotEqual(user.Last_login, user.Created, "As datas não devem permanecer iguais após o ultimo login");
         }
 
-        [TestMethod]
-        public void TesteVerificarUsuarioNaBase()
-        {
-            var repo = new UserRepo(_context);
-            bool result;
-
-            result = repo.CheckUser("email9.teste.com");
-            Assert.IsTrue(result, "O email indicado deveria existir no banco");
-
-            result = repo.CheckUser("email9.test.com");
-            Assert.IsFalse(result, "O email indicado não deveria existir no banco");
-        }
-
-        [TestMethod]
-        public void TesteValidarUsuarioNaBase()
-        {
-            User result;
-            var repo = new UserRepo(_context);
-            var user = _context.User.FirstOrDefault();
-
-            var lastLogin = user.Last_login;
-
-            result = repo.Validate("email9.teste.com", "123456");
-            Assert.IsNotNull(result, "O usuário está correto e foi invalidado");
-            Assert.AreNotEqual(lastLogin, result.Last_login, "O usuário não alterou a data de login");
-
-            result = repo.Validate("email9.teste.com", "1111");
-            Assert.IsNull(result, "O usuário está incorreto e foi validado");
-        }
     }
 }

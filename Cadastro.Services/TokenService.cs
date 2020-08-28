@@ -1,8 +1,7 @@
-﻿using Cadastro.Domain.Adapters;
-using Cadastro.Domain.Entities;
+﻿using Cadastro.Domain.Entities;
 using Cadastro.Services.Configs;
 using Cadastro.Services.Interfaces;
-using Cadastro.Services.Util;
+using Cadastro.Services.Models;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
