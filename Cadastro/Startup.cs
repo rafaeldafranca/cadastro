@@ -106,11 +106,6 @@ namespace Cadastro
 
             });
 
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                );
-
             var signingConfigurations = new SigningConfig();
             services.AddSingleton(signingConfigurations);
 

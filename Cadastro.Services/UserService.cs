@@ -1,6 +1,8 @@
 ﻿using Cadastro.Domain.Entities;
 using Cadastro.Domain.Interfaces.Repos;
 using Cadastro.Domain.Interfaces.Services;
+using Cadastro.Domain.Models;
+using Cadastro.Services.Models;
 using Cadastro.Util;
 using System;
 using System.Collections.Generic;
@@ -16,31 +18,34 @@ namespace Cadastro.Services
             _userRepo = userRepo;
         }
 
-        public User Add(User user)
-        {
-            //user.Password = user.Password.GetCadastroHashCode();
-            return _userRepo.Add(user);
-        }
-        
-        public IEnumerable<User> GetAll()
-        {
-            return _userRepo.GetAll();
-        }
+        public User Add(User user) => _userRepo.Add(user);
 
-        public bool CheckUser(string email)
-        {
-            return _userRepo.CheckUser(email);
-        }
+        public bool CheckUser(string email) => _userRepo.CheckUser(email);
 
-        public User Validate(string email, string password)
+        public LoginModel Validate(string email, string password)
         {
             var pwd = password.GetCadastroHashCode();
-            return _userRepo.Validate(email, pwd);
+            var data = _userRepo.Validate(email, pwd);
+            if (data == null) return null;
+
+            List<PhoneUserModel> phones = null;
+            if (data.Phones != null)
+            {
+                phones = new List<PhoneUserModel>();
+                data.Phones.ForEach(q =>
+                   {
+                       phones.Add(new PhoneUserModel() { Ddd = q.Ddd, Number = q.Number });
+                   });
+            }
+
+            return new LoginModel(data.Id, data.Name, data.Email, data.Created
+                                , data.Modified, data.Last_login, phones);
+
         }
 
-        public User GetbyId(Guid Id)
-        {
-            return _userRepo.Get(Id);
-        }
+        public User GetbyId(Guid Id) => _userRepo.Get(Id);
+
+        public IEnumerable<User> GetAll() => _userRepo.GetAll();
+
     }
 }
