@@ -18,10 +18,7 @@ namespace Cadastro.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userSrv;
-        public UserController(IUserService userService)
-        {
-            _userSrv = userService;
-        }
+        public UserController(IUserService userService) => _userSrv = userService;
 
         /// <summary>
         /// Cria um usuário novo
@@ -44,19 +41,18 @@ namespace Cadastro.Controllers
                     return StatusCode(400, "E-mail já existente");
 
                 var currentUser = _userSrv.Add(data.Adapter());
-                var currentLogin = new LoginModel(currentUser.Id, currentUser.Name, currentUser.Email
-                    , currentUser.Created, currentUser.Modified, currentUser.Last_login,
+
+                var currentLogin = new LoginModel(
+                    currentUser.Id, currentUser.Name, currentUser.Email,
+                    currentUser.Created, currentUser.Modified, currentUser.Last_login,
                     currentUser.Phones.Select(q => new PhoneUserModel()
                     {
                         Ddd = q.Ddd,
                         Number = q.Number
-                    }).ToList());
+                    })
+                    .ToList());
 
-                TokenModel token = new TokenService().Token(
-                                                currentLogin,
-                                                signingConfigurations,
-                                                tokenConfig);
-
+                var token = new TokenService().Token(currentLogin, signingConfigurations, tokenConfig);
                 currentLogin.Token = token.AccessToken;
 
                 return currentLogin;
@@ -71,10 +67,7 @@ namespace Cadastro.Controllers
         /// <returns></returns>
         [Authorize("Bearer")]
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
-        {
-            return ReturnPackage(() => _userSrv.GetAll());
-        }
+        public IActionResult GetAll() => ReturnPackage(() => _userSrv.GetAll());
 
         /// <summary>
         /// Buscar usuario corrente buscando por parâmetro.
@@ -101,13 +94,9 @@ namespace Cadastro.Controllers
         /// <returns></returns>
         [Authorize("Bearer")]
         [HttpGet("Profile")]
-        public IActionResult Get()
-        {
-            return ReturnPackage(() =>
-            {
-                Guid TokenUserId = Guid.Parse(User.Identity.Name);
-                return _userSrv.GetbyId(TokenUserId)?.Adapter();
-            });
-        }
+        public IActionResult Get() => ReturnPackage(() =>
+                                      _userSrv
+                                      .GetbyId(Guid.Parse(User.Identity.Name))?
+                                      .Adapter());
     }
 }

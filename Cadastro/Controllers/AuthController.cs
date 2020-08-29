@@ -5,7 +5,6 @@ using Cadastro.Services.Configs;
 using Cadastro.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace Cadastro.Controllers
 {
@@ -14,10 +13,7 @@ namespace Cadastro.Controllers
     public class AuthController : BaseController
     {
         private readonly IUserService _userSrv;
-        public AuthController(IUserService userService)
-        {
-            _userSrv = userService;
-        }
+        public AuthController(IUserService userService) => _userSrv = userService;
 
         /// <summary>
         /// Gera o token autenticando o usuário.
@@ -33,32 +29,21 @@ namespace Cadastro.Controllers
                                   , [FromServices] SigningConfig signingConfigurations
                                   , [FromServices] TokenConfig tokenConfig)
         {
-            try
+            return ReturnPackage(() =>
             {
-                return ReturnPackage(() =>
-                {
-                    bool UserExist = _userSrv.CheckUser(data.Email);
-                    if (!UserExist)
-                        return StatusCode(400, "Usuario Inválido");
+                bool UserExist = _userSrv.CheckUser(data.Email);
+                if (!UserExist)
+                    return StatusCode(400, "Usuario Inválido");
 
-                    else
-                    {
-                        var currentUser = _userSrv.Validate(data.Email, data.Password);
-                        if (currentUser == null)
-                            return StatusCode(401, "Usuario Inválido");
-                        else
-                        {
-                            var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
-                            currentUser.Token = token.AccessToken;
-                            return currentUser;
-                        }
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { mensagem = ex.Message });
-            }
+                var currentUser = _userSrv.Validate(data.Email, data.Password);
+                if (currentUser == null)
+                    return StatusCode(401, "Usuario Inválido");
+
+                var token = new TokenService().Token(currentUser, signingConfigurations, tokenConfig);
+                currentUser.Token = token.AccessToken;
+
+                return currentUser;
+            });
         }
     }
 }
