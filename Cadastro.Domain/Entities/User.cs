@@ -1,6 +1,7 @@
 ﻿using Cadastro.Domain.Base;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Cadastro.Domain.Entities
 {
@@ -16,6 +17,8 @@ namespace Cadastro.Domain.Entities
 
         public virtual List<Phone> Phones { get; set; }
 
+        private readonly Regex _emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+
         private User()
         {
         }
@@ -29,6 +32,7 @@ namespace Cadastro.Domain.Entities
                 .When(string.IsNullOrEmpty(name), "O nome não pode ser em branco")
                 .When(string.IsNullOrEmpty(email), "O email não pode ser em branco")
                 .When(string.IsNullOrEmpty(password), "A senha não pode ser em branco")
+                .When(string.IsNullOrEmpty(email) || !_emailRegex.Match(email).Success, "O email deve ser preenchido corretamente")
                 .ThrowExceptionIfExist();
 
             Name = name;

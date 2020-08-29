@@ -78,8 +78,7 @@ descomentar as linhas para que utilize esse micro ORM.
 	
 **Testes**
 
-Como item desejável, fiz alguns casos de teste usando um outro banco de memória gerado na inicialização dos mesmos.
-Os testes são basicamentes focados no EF e suas queries/persistências.
+Como item desejável, fiz alguns casos de teste unitários baseados no domínio.
 
 **Uma visão sobre as tecnologias**
 
